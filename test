@@ -1,0 +1,14 @@
+
+
+
+
+
+
+mod HelloWorld ~~|
+    fn hello() ~|
+        ;foo;.
+    |~
+    fn world() ~|
+        ;bar;.
+    |~
+|~~
