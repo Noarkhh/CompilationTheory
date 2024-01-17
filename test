@@ -5,10 +5,7 @@
 
 
 mod HelloWorld ~~|
-    fn hello() ~|
-        ;foo;.
-    |~
-    fn world() ~|
-        ;bar;.
+    fn hello(a, b) ~|
+        c <=> #{;g; :> ggg}.
     |~
 |~~

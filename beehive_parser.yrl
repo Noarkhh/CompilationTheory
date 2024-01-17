@@ -35,71 +35,66 @@ block.
 Endsymbol
 '$end'.
 
-opt_ws -> '$empty'.
-opt_ws -> ws.
+opt_ws -> '$empty' : "".
+opt_ws -> ws : '$1'.
 
-comma_separated_terms -> comma_separated_terms opt_ws ',' opt_ws term.
-comma_separated_terms -> term.
+comma_separated_terms -> comma_separated_terms opt_ws ',' opt_ws term : '$1' ++ ", " ++ '$5'.
+comma_separated_terms -> term : '$1'.
 
-key_value_pair -> term opt_ws ':>' opt_ws term.
+key_value_pair -> term opt_ws ':>' opt_ws term : '$1' ++ " => " ++ '$5'.
 
-comma_separated_key_value_pairs -> comma_separated_key_value_pairs opt_ws ',' opt_ws key_value_pair.
-comma_separated_key_value_pairs -> key_value_pair.
+comma_separated_key_value_pairs -> comma_separated_key_value_pairs opt_ws ',' opt_ws key_value_pair : '$1' ++ ", " ++ '$5'.
+comma_separated_key_value_pairs -> key_value_pair : '$1'.
 
-term -> tuple.
-term -> list.
-term -> map.
-term -> literal.
-term -> function_call.
-term -> variable.
+term -> tuple : '$1'.
+term -> list : '$1'.
+term -> map : '$1'.
+term -> literal : '$1'.
+term -> function_signature : '$1'.
+term -> variable : '$1'.
 
-literal -> string.
-literal -> int.
-literal -> float.
-literal -> bool.
-literal -> atom.
-% literal -> lambda.
+literal -> string : extract_string('$1').
+literal -> int : extract_string('$1').
+literal -> float : extract_string('$1').
+literal -> bool : extract_string('$1').
+literal -> atom : extract_string('$1').
 
-tuple -> '(' opt_ws comma_separated_terms opt_ws ')'.
-tuple -> '(' opt_ws ')'.
+tuple -> '(' opt_ws comma_separated_terms opt_ws ')' : "{" ++ '$3' ++ "}".
+tuple -> '(' opt_ws ')' : "{}".
 
-list -> '[' opt_ws comma_separated_terms opt_ws ']'.
-list -> '[' opt_ws ']'.
+list -> '[' opt_ws comma_separated_terms opt_ws ']' : "[" ++ '$3' ++ "]".
+list -> '[' opt_ws ']' : "[]".
 
-map -> '#{' opt_ws comma_separated_key_value_pairs opt_ws '}'.
-map -> '#{' opt_ws '}'.
+map -> '#{' opt_ws comma_separated_key_value_pairs opt_ws '}' : "%{" ++ '$3' ++ "}".
+map -> '#{' opt_ws '}' : "%{}".
 
-variable -> lowercase_word.
+variable -> lowercase_word : extract_string('$1').
 
-block -> opt_ws modules opt_ws.
+block -> opt_ws modules opt_ws : '$2'.
 
-% block -> ws 'mod' ws capitalized_word ws '~~|' ws functions ws '|~~' ws.
+modules -> module : '$1'.
+modules -> modules ws module : '$1' ++ "\n\n" ++ '$3'.
 
-modules -> module.
-modules -> modules ws module.
+module -> 'mod' ws capitalized_word ws '~~|' opt_ws functions opt_ws '|~~' : "defmodule " ++ extract_string('$3') ++ " do\n" ++ '$7' ++ "\nend".
 
-module -> 'mod' ws capitalized_word ws '~~|' opt_ws module_body opt_ws '|~~'.
-% module -> 'mod' ws capitalized_word ws '~|' ws '|~'.
+functions -> function : '$1'.
+functions -> functions ws function : '$1' ++ "\n\n" ++ '$3'.
 
-module_body -> functions.
+function -> 'fn' ws function_signature ws '~|' opt_ws statements opt_ws '|~' : "def " ++ extract_string('$3') ++ " do\n" ++ '$7' ++ "\nend".
+function -> 'fn' ws function_signature ws '~|' opt_ws '|~' : "def " ++ extract_string('$3') ++ " do\nend".
 
-functions -> function.
-functions -> functions ws function.
+function_signature -> lowercase_word '(' opt_ws comma_separated_terms opt_ws ')' : extract_string('$1') ++ "(" ++ '$3' ++ ")".
+function_signature -> lowercase_word '(' opt_ws ')' : extract_string('$1') ++ "()".
 
-function -> 'fn' ws function_signature ws '~|' opt_ws function_body opt_ws '|~'.
+statements -> statement : '$1'.
+statements -> statement ws statements : '$1' ++ '$3'.
 
-function_signature -> lowercase_word '(' opt_ws comma_separated_terms opt_ws ')'.
-function_signature -> lowercase_word '(' opt_ws ')'.
+statement -> match opt_ws '.' ws : '$1' ++ "\n".
+statement -> term opt_ws '.' ws : '$1' ++ "\n".
 
-function_call -> lowercase_word '(' opt_ws comma_separated_terms opt_ws ')'.
-function_call -> lowercase_word '(' opt_ws ')'.
+match -> term ws '<=>' ws term : '$1' ++ " = " ++ '$5'.
 
-function_body -> statements.
+Erlang code.
 
-statements -> '$empty'.
-statements -> statement ws statements.
-
-statement -> match '.'.
-statement -> term '.'.
-
-match -> term '<=>' term.
+extract_string({_, _, String}) -> wString;
+extract_string(String) -> String.
