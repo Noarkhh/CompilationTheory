@@ -1,0 +1,10 @@
+mod HelloWorld ~~|
+    fn hello() ~|
+        IO:puts('Hello').
+        world().
+    |~
+
+    fn world() ~|
+        IO:puts('World').
+    |~
+|~~
