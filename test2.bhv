@@ -1,0 +1,15 @@
+mod Recursive ~~|
+    fn fib(n) ~|
+        match n to
+        0 => 1.
+        1 => 1.
+        2 => 1.
+        n => fib(n - 1) + fib(n - 2)..
+    |~
+
+    fn factorial(n, p) ~|
+        match n to
+            0 => 1.
+            n => n * factorial(n - 1, p)..
+    |~
+|~~

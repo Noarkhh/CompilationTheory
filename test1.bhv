@@ -5,14 +5,11 @@
 
 
 mod HelloWorld ~~|
-    fn hello(a, b) ~|
-        if true then 1 else ^^2 - 3^ + 7^.
-    |~
 
     fn world(v) ~|
         match v to
-            ;a; => 3
-            ;b; => 30
-            ;c; => 300.
+            ;a; => 3.
+            ;b; => 30.
+            ;c; => 300..
     |~
 |~~

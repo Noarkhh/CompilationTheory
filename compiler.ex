@@ -36,5 +36,3 @@ defmodule BeehiveCompiler do
     |> File.write(result_string)
   end
 end
-
-BeehiveCompiler.compile(List.first(System.argv()))
