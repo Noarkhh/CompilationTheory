@@ -2,13 +2,25 @@ defmodule BeehiveCompiler do
   def compile(filename) do
     if not String.ends_with?(filename, ".bhv") do raise "Bad file extension" end
 
-    {:ok, tokens, _} =
+    lex_result =
       filename
       |> File.read!()
       |> String.to_charlist()
       |> :beehive_lexer.string()
 
-    {:ok, result_string} = :beehive_parser.parse(tokens)
+    tokens =
+      case lex_result do
+        {:ok, tokens, _} -> tokens
+        {:error, {line, _module, {reason, description}}, _} -> throw "[Lex Error] line: #{line}   #{reason}: #{description}"
+      end
+
+    parse_result = :beehive_parser.parse(tokens)
+
+    result_string =
+      case parse_result do
+        {:ok, res} -> res
+        {:error, {line, _module, errors}} -> throw "[Parse Error] line: #{line}, errors: #{errors}"
+      end
 
     lines =
       result_string

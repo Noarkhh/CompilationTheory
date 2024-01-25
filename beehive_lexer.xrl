@@ -11,7 +11,6 @@ false : {token, {bool, TokenLine, TokenChars}}.
 
 mod : {token, {'mod', TokenLine, TokenChars}}.
 fn : {token, {'fn', TokenLine, TokenChars}}.
-pfn : {token, {'pfn', TokenLine, TokenChars}}.
 
 if : {token, {'if', TokenLine, TokenChars}}.
 then : {token, {'then', TokenLine, TokenChars}}.
@@ -37,18 +36,6 @@ to : {token, {'to', TokenLine, TokenChars}}.
 ~\| : {token, {'~|', TokenLine, TokenChars}}.
 \|~~ : {token, {'|~~', TokenLine, TokenChars}}.
 ~~\| : {token, {'~~|', TokenLine, TokenChars}}.
-\| : {token, {'|', TokenLine, TokenChars}}.
-
-! : {token, {'!', TokenLine, TokenChars}}.
-@ : {token, {'@', TokenLine, TokenChars}}.
-# : {token, {'#', TokenLine, TokenChars}}.
-\$ : {token, {'$', TokenLine, TokenChars}}.
-\% : {token, {'%', TokenLine, TokenChars}}.
-\^ : {token, {'^', TokenLine, TokenChars}}.
-& : {token, {'&', TokenLine, TokenChars}}.
-
--> : {token, {'->', TokenLine, TokenChars}}.
-\|_\| : {token, {'|_|', TokenLine, TokenChars}}.
 
 \+ : {token, {'+', TokenLine, TokenChars}}.
 - : {token, {'-', TokenLine, TokenChars}}.
